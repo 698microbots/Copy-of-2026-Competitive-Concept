@@ -8,6 +8,7 @@ import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$0;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$1;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$2;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$3;
+import static frc.robot.generated.ChoreoTraj.simplePath;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
@@ -67,6 +68,7 @@ public final class AutoRoutines {
 
     public void configure() {
         autoChooser.addRoutine("Outpost and Depot", this::outpostAndDepotRoutine);
+        autoChooser.addRoutine("Simple Path", this::simpleRoutine);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
@@ -115,6 +117,15 @@ public final class AutoRoutines {
         shootingPoseToTower.active().whileTrue(limelight.idle());
         shootingPoseToTower.active().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
         shootingPoseToTower.done().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
+
+        return routine;
+    }
+
+    private AutoRoutine simpleRoutine() {
+        final AutoRoutine routine = autoFactory.newRoutine("Simple Path");
+        final AutoTrajectory startEnd = simplePath.asAutoTraj(routine);
+
+        routine.active().onTrue(Commands.sequence(startEnd.cmd()));
 
         return routine;
     }
