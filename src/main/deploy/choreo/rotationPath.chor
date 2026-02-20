@@ -1,5 +1,5 @@
 {
- "name":"180rotation",
+ "name":"rotationPath",
  "version":2,
  "type":"Swerve",
  "variables":{
