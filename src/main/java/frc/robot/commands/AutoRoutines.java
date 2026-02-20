@@ -125,7 +125,7 @@ public final class AutoRoutines {
         final AutoRoutine routine = autoFactory.newRoutine("Simple Path");
         final AutoTrajectory startEnd = simplePath.asAutoTraj(routine);
 
-        routine.active().onTrue(Commands.sequence(startEnd.cmd()));
+        routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
 
         return routine;
     }
