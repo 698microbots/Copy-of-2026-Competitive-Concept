@@ -59,6 +59,13 @@ public record ChoreoTraj(
 	    new Pose2d(2.498, 4.035, Rotation2d.fromRadians(0)),
 	    new Pose2d(0.941, 3.564, Rotation2d.fromRadians(3.142))
 	);
+	public static final ChoreoTraj rotationPath = new ChoreoTraj(
+	    "rotationPath",
+	    OptionalInt.empty(),
+	    2.54986,
+	    new Pose2d(0.834, 1.463, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.211, 4.557, Rotation2d.fromRadians(0))
+	);
 	public static final ChoreoTraj simplePath = new ChoreoTraj(
 	    "simplePath",
 	    OptionalInt.empty(),
@@ -77,6 +84,7 @@ public record ChoreoTraj(
 		Map.entry("OutpostAndDepotTrajectory$1", OutpostAndDepotTrajectory$1),
 		Map.entry("OutpostAndDepotTrajectory$2", OutpostAndDepotTrajectory$2),
 		Map.entry("OutpostAndDepotTrajectory$3", OutpostAndDepotTrajectory$3),
+		Map.entry("rotationPath", rotationPath),
 		Map.entry("simplePath", simplePath)
     );
 

@@ -9,6 +9,7 @@ import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$1;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$2;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$3;
 import static frc.robot.generated.ChoreoTraj.simplePath;
+import static frc.robot.generated.ChoreoTraj.rotationPath;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
@@ -67,6 +68,7 @@ public final class AutoRoutines {
     }
 
     public void configure() {
+        autoChooser.addRoutine("Rotating path", this::rotationRoutine);
         autoChooser.addRoutine("Outpost and Depot", this::outpostAndDepotRoutine);
         autoChooser.addRoutine("Simple Path", this::simpleRoutine);
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -126,6 +128,16 @@ public final class AutoRoutines {
         final AutoTrajectory startEnd = simplePath.asAutoTraj(routine);
 
         routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
+
+        return routine;
+    }
+
+    private AutoRoutine rotationRoutine() {
+        final AutoRoutine routine = autoFactory.newRoutine("Rotation Path");
+        final AutoTrajectory rotate = rotationPath.asAutoTraj(routine);
+
+
+        routine.active().onTrue(Commands.sequence(rotate.resetOdometry(),rotate.cmd()));
 
         return routine;
     }
