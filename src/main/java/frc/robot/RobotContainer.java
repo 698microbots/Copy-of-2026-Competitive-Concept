@@ -102,6 +102,8 @@ public class RobotContainer {
 
         driver.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
         driver.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
+
+        //new Trigger(driver :: y).whileTrue()
     }
 
     private void configureManualDriveBindings() {
@@ -115,7 +117,13 @@ public class RobotContainer {
         driver.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
         driver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
         driver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
-        driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
+        //driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
+        driver.y().onTrue(new ManualDriveCommand(
+            swerve, 
+            () -> LimelightHelpers.getTY("") * -0.1, 
+            () -> -driver.getLeftX(), 
+            () -> LimelightHelpers.getTX("")*-0.05
+        ));
         driver.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
     }
 
