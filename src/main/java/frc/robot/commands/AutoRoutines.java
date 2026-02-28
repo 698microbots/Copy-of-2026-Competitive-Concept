@@ -8,6 +8,7 @@ import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$0;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$1;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$2;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$3;
+import static frc.robot.generated.ChoreoTraj.moveForward;
 import static frc.robot.generated.ChoreoTraj.simplePath;
 import static frc.robot.generated.ChoreoTraj.rotationPath;
 
@@ -138,6 +139,16 @@ public final class AutoRoutines {
 
 
         routine.active().onTrue(Commands.sequence(rotate.resetOdometry(),rotate.cmd()));
+
+        return routine;
+    }
+
+    private AutoRoutine moveForwardRoutine(){
+        final AutoRoutine routine = autoFactory.newRoutine("Move Forward Path");
+        final AutoTrajectory startEnd = moveForward.asAutoTraj(routine);
+
+
+        routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
 
         return routine;
     }
