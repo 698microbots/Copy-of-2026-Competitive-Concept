@@ -19,6 +19,7 @@ import frc.robot.Constants.Driving;
 import frc.robot.commands.AutoRoutines;
 import frc.robot.commands.ManualDriveCommand;
 import frc.robot.commands.SubsystemCommands;
+import frc.robot.commands.TagAlignCommand;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Floor;
 import frc.robot.subsystems.Hanger;
@@ -36,14 +37,14 @@ import frc.util.SwerveTelemetry;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    private final Swerve swerve = new Swerve();
+    public final Swerve swerve = new Swerve();
     private final Intake intake = new Intake();
     private final Floor floor = new Floor();
     private final Feeder feeder = new Feeder();
     private final Shooter shooter = new Shooter();
     private final Hood hood = new Hood();
     private final Hanger hanger = new Hanger();
-    private final Limelight limelight = new Limelight("limelight");
+    protected final Limelight limelight = new Limelight("ll");
 
     private final SwerveTelemetry swerveTelemetry = new SwerveTelemetry(Driving.kMaxSpeed.in(MetersPerSecond));
     
@@ -103,7 +104,11 @@ public class RobotContainer {
         driver.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
         driver.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
 
-        //new Trigger(driver :: y).whileTrue()
+        
+        //driver.leftBumper().whileTrue(new TagAlignCommand(limelight, swerve,  () -> -driver.getLeftY(), () -> -driver.getRightX()));
+        
+       
+
     }
 
     private void configureManualDriveBindings() {
@@ -113,20 +118,29 @@ public class RobotContainer {
             () -> -driver.getLeftX(), 
             () -> -driver.getRightX()
         );
+        final ManualDriveCommand md2 = new ManualDriveCommand(swerve, () -> LimelightHelpers.getTY("limelight"), () -> -driver.getLeftX(), () -> LimelightHelpers.getTX("limelight"));
+
         swerve.setDefaultCommand(manualDriveCommand);
         driver.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
         driver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
-        driver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
-        //driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
-        driver.y().onTrue(new ManualDriveCommand(
+        //driver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
+       // driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
+        driver.y().whileTrue(new ManualDriveCommand(
             swerve, 
-            () -> LimelightHelpers.getTY("") * -0.1, 
+            () -> LimelightHelpers.getTY("limelight") * 0.1, 
             () -> -driver.getLeftX(), 
-            () -> LimelightHelpers.getTX("")*-0.05
+            () -> LimelightHelpers.getTX("limelight")*.03
         ));
-        driver.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
-    }
 
+         driver.x().whileTrue(md2);
+
+        //driver.rightTrigger().whileTrue(new TagAlignCommand(limelight, swerve, "right",  () -> -driver.getLeftY(), () -> -driver.getRightX()));
+        //driver.y().whileTrue(new TagAlignCommand(limelight, swerve, null, null, null))
+
+        driver.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
+
+
+    }
 
 
     private Command updateVisionCommand() {
@@ -143,4 +157,5 @@ public class RobotContainer {
         })
         .ignoringDisable(true);
     }
+
 }

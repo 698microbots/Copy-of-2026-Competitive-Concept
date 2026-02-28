@@ -5,9 +5,12 @@ import java.util.Optional;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,6 +21,8 @@ public class Limelight extends SubsystemBase {
     private final String name;
     private final NetworkTable telemetryTable;
     private final StructPublisher<Pose2d> posePublisher;
+    private double[] poseList, targetPoseList, cameraPoseList;
+    private NetworkTableEntry V_angle, H_angle, TwoH_angle, hasTargets, botPose, aprilID, targetPose, cameraPose;
 
     public Limelight(String name) {
         this.name = name;
@@ -62,4 +67,53 @@ public class Limelight extends SubsystemBase {
             this.standardDeviations = standardDeviations;
         }
     }
+
+    public Pose3d getRelative3dBotPose() {
+        /*
+        * Its specific because it determines what type of botpose we need
+        * For example, we may need the botpose, botpose_wpiblue, botpose_wpired, etc
+        * in order to tell our distance from the apriltag.
+        * This method should give us an x and y position to the april tag as well as a
+        * rotaiton angle to it
+        */
+        poseList = botPose.getDoubleArray(new double[6]);
+        // position
+        double x = poseList[0];
+        double y = poseList[1];
+        double z = poseList[2];
+        // rotation
+        double roll = poseList[3];
+        double pitch = poseList[4];
+        double yaw = poseList[5];
+
+        Pose3d pose3d = new Pose3d(
+            x,
+            y,
+            z,
+            new Rotation3d(
+                roll,
+                pitch,
+                yaw));
+        return pose3d;
+    }  
+
+   public double getH_angle() {
+    return H_angle.getDouble(0);
+    }
+
+  public boolean getHasTargets() {
+    if (hasTargets.getDouble(0) == 0) {
+      return false;
+    }
+    return true;
+  }
+
+  public double getTX(){
+    return NetworkTableInstance.getDefault().getTable("ll").getEntry("tx").getDouble(0);
+  }
+
+  public double getTY(){
+    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+  }
+
 }

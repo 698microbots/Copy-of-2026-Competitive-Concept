@@ -6,10 +6,12 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Limelight;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -18,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
     private final RobotContainer m_robotContainer;
-    
+   
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -29,6 +31,7 @@ public class Robot extends TimedRobot {
         m_robotContainer = new RobotContainer();
         SmartDashboard.putData(CommandScheduler.getInstance());
         RobotController.setBrownoutVoltage(Volts.of(6.1));
+        
     }
     
     /**
@@ -45,5 +48,20 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+
+        //System.out.println(LimelightHelpers.getTX("limelight"));
+        //System.out.println(LimelightHelpers.getTV("limelight"));
+        //System.out.println(m_robotContainer.limelight.getHasTargets());
+        // System.out.println(LimelightHelpers.getTV("limelight"));
+        // System.out.println(LimelightHelpers.getTX("limelight"));
+        // System.out.println(LimelightHelpers.getTY("limelight"));
+
+
+        // System.out.println(m_robotContainer.limelight);
+        // if (m_robotContainer.limelight == null){
+        //     System.out.println("Limelight is null");
+        // }
+
     }
+    
 }
