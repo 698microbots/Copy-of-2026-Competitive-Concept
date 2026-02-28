@@ -32,7 +32,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     /** Swerve request to apply during field-centric path following */
     private final SwerveRequest.ApplyFieldSpeeds pathFieldSpeedsRequest = new SwerveRequest.ApplyFieldSpeeds();
-    private final PIDController pathXController = new PIDController(10, 0, 0);
+    private final PIDController pathXController = new PIDController(10, 0, 0); //update
     private final PIDController pathYController = new PIDController(10, 0, 0);
     private final PIDController pathThetaController = new PIDController(7, 0, 0);
 
