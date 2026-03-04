@@ -88,9 +88,10 @@ public class Feeder extends SubsystemBase {
         return startEnd(() -> set(Speed.FEED), () -> setPercentOutput(0));
     }
 
-    public Command spin(){
-        return runOnce(() -> set(Speed.FEED));
-    }
+    // public Command spin(){
+    //     return runOnce(() -> set(Speed.Speed(0)));
+    // }
+
 
     @Override
     public void initSendable(SendableBuilder builder) {

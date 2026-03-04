@@ -10,8 +10,8 @@ public final class Ports {
     // Talon FX IDs
     public static final int kIntakePivot = 11; //Intake Pivot On Feeder (right on bot)
     public static final int kIntakeRollers = 9; //Intake motor on rollers
-    public static final int kFloor = 12; //Feeder to column (below shooter)
-    public static final int kFeeder = 13; //Feeder (left on bot)
+    public static final int kFloor = 13; //Feeder to column (below shooter)
+    public static final int kFeeder = 12; //Feeder (left on bot)
 
 
     public static final int kShooterLeft = 14; //Column
