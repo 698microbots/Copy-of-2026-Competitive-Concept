@@ -79,8 +79,8 @@ public class Intake extends SubsystemBase {
     public Intake() {
         pivotMotor = new TalonFX(Ports.kIntakePivot, Ports.kRoboRioCANBus);
         rollerMotor = new TalonFX(Ports.kIntakeRollers, Ports.kRoboRioCANBus);
-        configurePivotMotor();
-        configureRollerMotor();
+        //configurePivotMotor();
+        //configureRollerMotor();
         SmartDashboard.putData(this);
     }
 

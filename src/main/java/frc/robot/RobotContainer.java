@@ -92,11 +92,12 @@ public class RobotContainer {
         configureManualDriveBindings();
         limelight.setDefaultCommand(updateVisionCommand());
 
-        RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
-            .onTrue(intake.homingCommand())
-            .onTrue(hanger.homingCommand());
+        // RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
+        //     .onTrue(intake.homingCommand())
+        //     .onTrue(hanger.homingCommand());
 
-        driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
+
+        // driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
         driver.rightBumper().whileTrue(subsystemCommands.shootManually());
         //driver.leftTrigger().whileTrue(intake.intakeCommand());
         
@@ -140,6 +141,8 @@ public class RobotContainer {
 
         driver.leftTrigger().whileTrue(intake.spin());
         driver.leftTrigger().whileFalse(intake.stop());
+
+        driver.rightTrigger().whileTrue(feeder.spin());
 
 
     }
