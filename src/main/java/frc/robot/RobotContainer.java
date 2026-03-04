@@ -98,7 +98,8 @@ public class RobotContainer {
 
         driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
         driver.rightBumper().whileTrue(subsystemCommands.shootManually());
-        driver.leftTrigger().whileTrue(intake.intakeCommand());
+        //driver.leftTrigger().whileTrue(intake.intakeCommand());
+        
         driver.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
 
         driver.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
@@ -132,12 +133,13 @@ public class RobotContainer {
             () -> LimelightHelpers.getTX("limelight")*.03
         ));
 
-         driver.x().whileTrue(md2);
-
         //driver.rightTrigger().whileTrue(new TagAlignCommand(limelight, swerve, "right",  () -> -driver.getLeftY(), () -> -driver.getRightX()));
         //driver.y().whileTrue(new TagAlignCommand(limelight, swerve, null, null, null))
 
         driver.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
+
+        driver.leftTrigger().whileTrue(intake.spin());
+        driver.leftTrigger().whileFalse(intake.stop());
 
 
     }
