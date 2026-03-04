@@ -142,8 +142,8 @@ public class RobotContainer {
         driver.leftTrigger().whileTrue(intake.spin());
         driver.leftTrigger().whileFalse(intake.stop());
 
-        //driver.rightTrigger().whileTrue(feeder.spin());
-        driver.rightTrigger().whileFalse(feeder.feedCommand());
+        driver.rightTrigger().whileTrue(feeder.spin());
+        driver.rightTrigger().whileFalse(feeder.stop());
 
 
     }
