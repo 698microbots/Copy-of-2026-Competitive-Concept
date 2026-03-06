@@ -14,12 +14,12 @@ public final class Ports {
     public static final int kFeeder = 12; //Feeder (left on bot)
 
 
-    public static final int kShooterLeft = 14; //Column
-    public static final int kShooterMiddle = 15; //Column
+    public static final int kShooterLeft = 16; //Column
+    public static final int kShooterMiddle = 14; //Column
     public static final int kShooterRight = 16; // Column
-    public static final int kHanger = 18; // Climber hook
+    public static final int kHanger = 17; // Climber hook
 
     // PWM Ports
-    public static final int kHoodLeftServo = 3;
-    public static final int kHoodRightServo = 4;
+    public static final int kHoodLeftServo = 9;
+    public static final int kHoodRightServo = 8;
 }
