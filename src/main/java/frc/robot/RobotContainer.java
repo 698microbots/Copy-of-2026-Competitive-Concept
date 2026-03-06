@@ -92,24 +92,24 @@ public class RobotContainer {
         configureManualDriveBindings();
         limelight.setDefaultCommand(updateVisionCommand());
 
+        //Original default commands at beginning of match:
         // RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
-        //     .onTrue(intake.homingCommand())
-        //     .onTrue(hanger.homingCommand());
+        //     .onTrue(intake.homingCommand())  //puts intake in starting position
+        //     .onTrue(hanger.homingCommand()); //puts hanger/climber in starting position
 
-
+        //Default controller bindings:
         // driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
-        driver.rightBumper().whileTrue(subsystemCommands.shootManually());
-        //driver.leftTrigger().whileTrue(intake.intakeCommand());
-        
-        driver.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
+        //driver.rightBumper().whileTrue(subsystemCommands.shootManually());
+        //driver.leftTrigger().whileTrue(intake.intakeCommand());  
+        //driver.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
 
-        driver.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
-        driver.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
 
+        //Shooter test:
+        driver.leftBumper().whileTrue(shooter.spinUpCommand(1000));
         
-        //driver.leftBumper().whileTrue(new TagAlignCommand(limelight, swerve,  () -> -driver.getLeftY(), () -> -driver.getRightX()));
-        
-       
+        //Default hanger bindings 
+        driver.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING)); //povUp is the up arrow on D-pad
+        driver.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG)); //povDown is down arrow on D-pad
 
     }
 
@@ -120,30 +120,33 @@ public class RobotContainer {
             () -> -driver.getLeftX(), 
             () -> -driver.getRightX()
         );
-        final ManualDriveCommand md2 = new ManualDriveCommand(swerve, () -> LimelightHelpers.getTY("limelight"), () -> -driver.getLeftX(), () -> LimelightHelpers.getTX("limelight"));
-
+        
         swerve.setDefaultCommand(manualDriveCommand);
+
+        //Default 'a' 'b' 'x' 'y' button bindings (rotation commands):
         driver.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
         driver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
         //driver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
        // driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
-        driver.y().whileTrue(new ManualDriveCommand(
+       
+       //Track and align with aprilTag:
+       driver.y().whileTrue(new ManualDriveCommand(
             swerve, 
             () -> LimelightHelpers.getTY("limelight") * 0.1, 
-            () -> -driver.getLeftX(), 
+            () -> -driver.getLeftX(), // forward and backward motion is controlled by driver
             () -> LimelightHelpers.getTX("limelight")*.03
         ));
 
-        //driver.rightTrigger().whileTrue(new TagAlignCommand(limelight, swerve, "right",  () -> -driver.getLeftY(), () -> -driver.getRightX()));
-        //driver.y().whileTrue(new TagAlignCommand(limelight, swerve, null, null, null))
-
         driver.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
 
+        //Intake test:
         driver.leftTrigger().whileTrue(intake.spin());
         driver.leftTrigger().whileFalse(intake.stop());
 
+        //Feeder test:
         driver.rightTrigger().whileTrue(feeder.spin());
-        driver.rightTrigger().whileFalse(feeder.stop());
+       //Caused feeder motor to slip and feeder stopped
+       // driver.rightTrigger().whileFalse(feeder.stop());
 
 
     }

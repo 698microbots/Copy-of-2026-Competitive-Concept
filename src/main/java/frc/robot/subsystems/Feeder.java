@@ -26,7 +26,7 @@ import frc.robot.Ports;
 public class Feeder extends SubsystemBase {
     public enum Speed {
         //FEED(5000);
-        FEED(1000),
+        FEED(2000),
         STOP(0);
         private final double rpm;
 
@@ -49,7 +49,7 @@ public class Feeder extends SubsystemBase {
         final TalonFXConfiguration config = new TalonFXConfiguration()
             .withMotorOutput(
                 new MotorOutputConfigs()
-                    .withInverted(InvertedValue.CounterClockwise_Positive)
+                    .withInverted(InvertedValue.Clockwise_Positive)
                     .withNeutralMode(NeutralModeValue.Coast)
             )
             .withCurrentLimits(
@@ -92,7 +92,7 @@ public class Feeder extends SubsystemBase {
     public Command spin(){
         return runOnce(() -> set(Speed.FEED));
     }
-    
+
     public Command stop(){
         return runOnce(() -> set(Speed.STOP));
     }
