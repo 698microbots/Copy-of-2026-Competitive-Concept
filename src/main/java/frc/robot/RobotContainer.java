@@ -102,14 +102,28 @@ public class RobotContainer {
         //driver.rightBumper().whileTrue(subsystemCommands.shootManually());
         //driver.leftTrigger().whileTrue(intake.intakeCommand());  
         //driver.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
-
-
-        //Shooter test:
-        driver.leftBumper().whileTrue(shooter.spinUpCommand(1000));
         
-        //Default hanger bindings 
+        //Default hanger bindings:
         driver.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING)); //povUp is the up arrow on D-pad
         driver.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG)); //povDown is down arrow on D-pad
+
+        //Intake test (runs the rollers when pressed and stops when not pressed):
+        driver.leftTrigger().whileTrue(intake.spin());
+        driver.leftTrigger().whileFalse(intake.stop());
+
+        //Feeder test (feeder keeps running after not pressed):
+        driver.rightTrigger().whileTrue(feeder.spin());
+       //Caused feeder motor to slip and feeder stopped:
+       // driver.rightTrigger().whileFalse(feeder.stop());
+
+       //Shooter test (motors run opposite directions, right motor does not run):
+        driver.leftBumper().whileTrue(shooter.spinUpCommand(1000));
+
+        //Floor test:
+        driver.x().whileTrue(floor.feedCommand());
+
+        //Hood test (position between 0.0 and 1.0):
+        driver.b().onTrue(hood.positionCommand(0.3));
 
     }
 
@@ -125,9 +139,9 @@ public class RobotContainer {
 
         //Default 'a' 'b' 'x' 'y' button bindings (rotation commands):
         driver.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
-        driver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
+        //driver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
         //driver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
-       // driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
+        // driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
        
        //Track and align with aprilTag:
        driver.y().whileTrue(new ManualDriveCommand(
@@ -138,16 +152,6 @@ public class RobotContainer {
         ));
 
         driver.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
-
-        //Intake test:
-        driver.leftTrigger().whileTrue(intake.spin());
-        driver.leftTrigger().whileFalse(intake.stop());
-
-        //Feeder test:
-        driver.rightTrigger().whileTrue(feeder.spin());
-       //Caused feeder motor to slip and feeder stopped
-       // driver.rightTrigger().whileFalse(feeder.stop());
-
 
     }
 

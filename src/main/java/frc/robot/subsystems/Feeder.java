@@ -89,10 +89,12 @@ public class Feeder extends SubsystemBase {
         return startEnd(() -> set(Speed.FEED), () -> setPercentOutput(0));
     }
 
+    //Added a spin command:
     public Command spin(){
         return runOnce(() -> set(Speed.FEED));
     }
 
+    //Added a stop command (does not work with whileFalse binding):
     public Command stop(){
         return runOnce(() -> set(Speed.STOP));
     }

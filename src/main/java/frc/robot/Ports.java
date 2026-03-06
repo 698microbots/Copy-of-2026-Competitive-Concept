@@ -16,7 +16,7 @@ public final class Ports {
 
     public static final int kShooterLeft = 16; //Column
     public static final int kShooterMiddle = 14; //Column
-    public static final int kShooterRight = 16; // Column
+    public static final int kShooterRight = 15; // Column
     public static final int kHanger = 17; // Climber hook
 
     // PWM Ports
