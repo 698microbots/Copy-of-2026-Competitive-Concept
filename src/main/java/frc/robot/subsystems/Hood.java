@@ -37,7 +37,10 @@ public class Hood extends SubsystemBase {
         rightServo = new Servo(Ports.kHoodRightServo);
         leftServo.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
         rightServo.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
-        setPosition(currentPosition);
+
+        //Sets hood at position 0.5 automatically upon enabling:
+        //setPosition(currentPosition);
+        
         SmartDashboard.putData(this);
     }
 

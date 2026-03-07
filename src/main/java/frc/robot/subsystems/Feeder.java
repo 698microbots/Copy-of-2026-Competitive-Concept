@@ -107,4 +107,7 @@ public class Feeder extends SubsystemBase {
         builder.addDoubleProperty("Stator Current", () -> motor.getStatorCurrent().getValue().in(Amps), null);
         builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
     }
+
+    @Override
+    public void periodic(){}
 }
