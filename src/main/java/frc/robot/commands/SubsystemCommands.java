@@ -81,8 +81,8 @@ public final class SubsystemCommands {
         );
     }
 
-    public Command shootManually() {
-        return shooter.dashboardSpinUpCommand()
+    public Command shootManually(double rpm) {
+        return shooter.spinUpCommand(rpm)
             .andThen(feed())
             .handleInterrupt(() -> shooter.stop());
     }
