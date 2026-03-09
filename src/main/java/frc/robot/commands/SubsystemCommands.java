@@ -89,12 +89,12 @@ public final class SubsystemCommands {
     }
 
     //Added this command to shootManually (run feeder,column, and agitate intake at same time) while running the shooter:
-    public Command shootAndFeed(){
-        return Commands.parallel(
-            shootManually(),
-            shooter.spinUpCommand(2000)
-        );
-    }
+    // public Command shootAndFeed(){
+    //     return Commands.parallel(
+    //         shootManually(),
+    //         shooter.spinUpCommand(2000)
+    //     );
+    // }
 
     private Command feed() {
         return Commands.sequence(
@@ -102,7 +102,7 @@ public final class SubsystemCommands {
             Commands.parallel(
                 feeder.feedCommand(),
                 Commands.waitSeconds(0.125)
-                    .andThen(floor.feedCommand().alongWith(intake.agitateCommand()))
+                    .andThen(floor.feedCommand())
             )
         );
     }

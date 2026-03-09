@@ -44,7 +44,7 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter();
     private final Hood hood = new Hood();
     private final Hanger hanger = new Hanger();
-    protected final Limelight limelight = new Limelight("ll");
+    protected final Limelight limelight = new Limelight("limelight");
 
     private final SwerveTelemetry swerveTelemetry = new SwerveTelemetry(Driving.kMaxSpeed.in(MetersPerSecond));
     
@@ -102,9 +102,9 @@ public class RobotContainer {
         //     .onTrue(hanger.homingCommand()); //puts hanger/climber in starting position
 
         //Default controller bindings:
-        // driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
-        //driver.rightBumper().whileTrue(subsystemCommands.shootManually());
-        //driver.leftTrigger().whileTrue(intake.intakeCommand());  
+        driver2.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
+        driver2.rightBumper().whileTrue(subsystemCommands.shootManually());
+        driver2.leftTrigger().whileTrue(intake.intakeCommand());  
         //driver.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
         
         //Default hanger bindings:
@@ -112,11 +112,11 @@ public class RobotContainer {
         driver2.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG)); //povDown is down arrow on D-pad
 
         //Intake test (runs the rollers when pressed and stops when not pressed):
-        driver2.leftTrigger().whileTrue(intake.spin());
-        driver2.leftTrigger().whileFalse(intake.stop());
+        // driver2.leftTrigger().whileTrue(intake.spin());
+        // driver2.leftTrigger().whileFalse(intake.stop());
 
         //Feeder test (feeder keeps running after not pressed):
-        driver2.rightTrigger().whileTrue(feeder.spin());
+       // driver2.rightTrigger().whileTrue(feeder.spin());
        //Caused feeder motor to slip and feeder stopped:
        // driver.rightTrigger().whileFalse(feeder.stop());
 
@@ -131,7 +131,13 @@ public class RobotContainer {
 
         //Shoot manually test:
         //driver.a().onTrue(subsystemCommands.shootManually());
-        driver2.a().onTrue(subsystemCommands.shootAndFeed());
+        //driver2.a().onTrue(subsystemCommands.shootAndFeed());
+
+        //Intake set position test:
+        driver2.y().onTrue(intake.homingCommand());
+        //driver2.rightBumper().onTrue(intake.setIntakePositionUp());
+        //driver2.y().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
+        //driver2.y().onTrue(intake.runOnce(() -> intake.set(Intake.Position.HOMED)));
 
     }
 

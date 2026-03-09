@@ -79,7 +79,7 @@ public class Intake extends SubsystemBase {
     public Intake() {
         pivotMotor = new TalonFX(Ports.kIntakePivot, Ports.kRoboRioCANBus);
         rollerMotor = new TalonFX(Ports.kIntakeRollers, Ports.kRoboRioCANBus);
-        //configurePivotMotor();
+        configurePivotMotor();
         //configureRollerMotor();
         SmartDashboard.putData(this);
     }
@@ -88,7 +88,7 @@ public class Intake extends SubsystemBase {
         final TalonFXConfiguration config = new TalonFXConfiguration()
             .withMotorOutput(
                 new MotorOutputConfigs()
-                    .withInverted(InvertedValue.CounterClockwise_Positive)
+                    .withInverted(InvertedValue.Clockwise_Positive)
                     .withNeutralMode(NeutralModeValue.Brake)
             )
             .withCurrentLimits(
@@ -162,10 +162,12 @@ public class Intake extends SubsystemBase {
         );
     }
 
+    //HOMED put intake in down position
+    //INTAKE put intake up
     public Command intakeCommand() {
         return startEnd(
             () -> {
-                set(Position.INTAKE);
+                set(Position.HOMED);
                 set(Speed.INTAKE);
             },
             () -> set(Speed.STOP)
@@ -201,6 +203,10 @@ public class Intake extends SubsystemBase {
         )
         .unless(() -> isHomed)
         .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+
+    public Command setIntakePositionUp(){
+        return runOnce(() -> pivotMotor.setPosition(Position.INTAKE.angle()));
     }
 
     public Command spin() {
