@@ -72,6 +72,7 @@ public final class AutoRoutines {
         autoChooser.addRoutine("Rotating path", this::rotationRoutine);
         autoChooser.addRoutine("Outpost and Depot", this::outpostAndDepotRoutine);
         autoChooser.addRoutine("Simple Path", this::simpleRoutine);
+         autoChooser.addRoutine("Move Forward 2m", this::moveForwardRoutine);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }

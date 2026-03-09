@@ -144,26 +144,26 @@ public class RobotContainer {
     private void configureManualDriveBindings() {
         final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(
             swerve, 
-            () -> -driver2.getLeftY(), 
-            () -> -driver2.getLeftX(), 
-            () -> -driver2.getRightX()
+            () -> -swerveDriver.getLeftY(), 
+            () -> -swerveDriver.getLeftX(), 
+            () -> -swerveDriver.getRightX()
         );
         
         swerve.setDefaultCommand(manualDriveCommand);
 
         //Default 'a' 'b' 'x' 'y' button bindings (rotation commands):
-        //driver.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
-        //driver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
-        //driver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
-        // driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
+        swerveDriver.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
+        swerveDriver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
+        swerveDriver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
+        swerveDriver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
        
        //Track and align with aprilTag:
-       swerveDriver.y().whileTrue(new ManualDriveCommand(
-            swerve, 
-            () -> LimelightHelpers.getTY("limelight") * 0.1, 
-            () -> -driver2.getLeftX(), // forward and backward motion is controlled by driver
-            () -> LimelightHelpers.getTX("limelight")*.03
-        ));
+    //    swerveDriver.y().whileTrue(new ManualDriveCommand(
+    //         swerve, 
+    //         () -> LimelightHelpers.getTY("limelight") * 0.1, 
+    //         () -> -driver2.getLeftX(), // forward and backward motion is controlled by driver
+    //         () -> LimelightHelpers.getTX("limelight")*.03
+    //     ));
 
         //P1 reset field-centric heading:
         swerveDriver.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));

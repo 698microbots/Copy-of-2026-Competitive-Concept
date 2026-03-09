@@ -24,47 +24,54 @@ public record ChoreoTraj(
     Pose2d initialPoseBlue,
     Pose2d endPoseBlue
 ) {
-    public static final ChoreoTraj OutpostAndDepotTrajectory = new ChoreoTraj(
+    public static final ChoreoTraj moveForward = new ChoreoTraj(
+	    "moveForward",
+	    OptionalInt.empty(),
+	    1.42951,
+	    new Pose2d(0.5, 2.3, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.5, 2.3, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj OutpostAndDepotTrajectory = new ChoreoTraj(
 	    "OutpostAndDepotTrajectory",
 	    OptionalInt.empty(),
-	    11.35632,
+	    11.36133,
 	    new Pose2d(3.598, 0.64, Rotation2d.fromRadians(3.142)),
 	    new Pose2d(0.941, 3.564, Rotation2d.fromRadians(3.142))
 	);
 	public static final ChoreoTraj OutpostAndDepotTrajectory$0 = new ChoreoTraj(
 	    "OutpostAndDepotTrajectory",
 	    OptionalInt.of(0),
-	    1.81742,
+	    1.81743,
 	    new Pose2d(3.598, 0.64, Rotation2d.fromRadians(3.142)),
 	    new Pose2d(0.581, 0.669, Rotation2d.fromRadians(3.142))
 	);
 	public static final ChoreoTraj OutpostAndDepotTrajectory$1 = new ChoreoTraj(
 	    "OutpostAndDepotTrajectory",
 	    OptionalInt.of(1),
-	    3.40099,
+	    3.40106,
 	    new Pose2d(0.581, 0.669, Rotation2d.fromRadians(3.142)),
 	    new Pose2d(0.668, 5.964, Rotation2d.fromRadians(3.142))
 	);
 	public static final ChoreoTraj OutpostAndDepotTrajectory$2 = new ChoreoTraj(
 	    "OutpostAndDepotTrajectory",
 	    OptionalInt.of(2),
-	    2.5827999999999998,
+	    2.5892600000000003,
 	    new Pose2d(0.668, 5.964, Rotation2d.fromRadians(3.142)),
 	    new Pose2d(2.498, 4.035, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj OutpostAndDepotTrajectory$3 = new ChoreoTraj(
 	    "OutpostAndDepotTrajectory",
 	    OptionalInt.of(3),
-	    3.55511,
+	    3.55358,
 	    new Pose2d(2.498, 4.035, Rotation2d.fromRadians(0)),
 	    new Pose2d(0.941, 3.564, Rotation2d.fromRadians(3.142))
 	);
 	public static final ChoreoTraj rotationPath = new ChoreoTraj(
 	    "rotationPath",
 	    OptionalInt.empty(),
-	    2.54986,
-	    new Pose2d(0.834, 1.463, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.211, 4.557, Rotation2d.fromRadians(0))
+	    1.31798,
+	    new Pose2d(1.511, 1.492, Rotation2d.fromRadians(0)),
+	    new Pose2d(1.511, 1.492, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj simplePath = new ChoreoTraj(
 	    "simplePath",
@@ -73,27 +80,20 @@ public record ChoreoTraj(
 	    new Pose2d(1.41, 3.736, Rotation2d.fromRadians(0)),
 	    new Pose2d(2.521, 3.775, Rotation2d.fromRadians(0))
 	);
-	public static final ChoreoTraj moveForward = new ChoreoTraj(
-	    "moveForward",
-	    OptionalInt.empty(),
-	    1.2474,
-	    new Pose2d(0.5, 2.3, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.5, 2.3, Rotation2d.fromRadians(0))
-	);
 
     /**
      * A map between trajectory names and their corresponding data.
      * This allows for trajectory data to be looked up with strings during runtime.
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
-    	Map.entry("OutpostAndDepotTrajectory", OutpostAndDepotTrajectory),
+    	Map.entry("moveForward", moveForward),
+		Map.entry("OutpostAndDepotTrajectory", OutpostAndDepotTrajectory),
 		Map.entry("OutpostAndDepotTrajectory$0", OutpostAndDepotTrajectory$0),
 		Map.entry("OutpostAndDepotTrajectory$1", OutpostAndDepotTrajectory$1),
 		Map.entry("OutpostAndDepotTrajectory$2", OutpostAndDepotTrajectory$2),
 		Map.entry("OutpostAndDepotTrajectory$3", OutpostAndDepotTrajectory$3),
 		Map.entry("rotationPath", rotationPath),
-		Map.entry("simplePath", simplePath),
-		Map.entry("moveForward", moveForward)
+		Map.entry("simplePath", simplePath)
     );
 
     /**

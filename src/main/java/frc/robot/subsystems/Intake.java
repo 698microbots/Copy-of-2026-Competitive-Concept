@@ -35,7 +35,7 @@ import frc.robot.Ports;
 public class Intake extends SubsystemBase {
     public enum Speed {
         STOP(0),
-        INTAKE(0.3);
+        INTAKE(0.8);
 
         private final double percentOutput;
 
@@ -167,7 +167,7 @@ public class Intake extends SubsystemBase {
     public Command intakeCommand() {
         return startEnd(
             () -> {
-                set(Position.HOMED);
+                //set(Position.HOMED); //removed because pivot motor was stalling
                 set(Speed.INTAKE);
             },
             () -> set(Speed.STOP)
