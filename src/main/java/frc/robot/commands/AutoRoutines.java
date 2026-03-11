@@ -8,6 +8,8 @@ import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$0;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$1;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$2;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$3;
+import static frc.robot.generated.ChoreoTraj.align1;
+import static frc.robot.generated.ChoreoTraj.moveBackwards;
 import static frc.robot.generated.ChoreoTraj.moveForward;
 import static frc.robot.generated.ChoreoTraj.simplePath;
 import static frc.robot.generated.ChoreoTraj.rotationPath;
@@ -18,6 +20,7 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Floor;
@@ -73,6 +76,8 @@ public final class AutoRoutines {
         autoChooser.addRoutine("Outpost and Depot", this::outpostAndDepotRoutine);
         autoChooser.addRoutine("Simple Path", this::simpleRoutine);
          autoChooser.addRoutine("Move Forward 2m", this::moveForwardRoutine);
+        autoChooser.addRoutine("Move Backward", this::moveBackwardsRoutine);
+        autoChooser.addRoutine("Align to middle and shoot", this::align1Routine);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
@@ -137,7 +142,7 @@ public final class AutoRoutines {
     private AutoRoutine rotationRoutine() {
         final AutoRoutine routine = autoFactory.newRoutine("Rotation Path");
         final AutoTrajectory rotate = rotationPath.asAutoTraj(routine);
-
+        rotate.active().whileTrue(limelight.idle());
 
         routine.active().onTrue(Commands.sequence(rotate.resetOdometry(),rotate.cmd()));
 
@@ -147,9 +152,38 @@ public final class AutoRoutines {
     private AutoRoutine moveForwardRoutine(){
         final AutoRoutine routine = autoFactory.newRoutine("Move Forward Path");
         final AutoTrajectory startEnd = moveForward.asAutoTraj(routine);
+        startEnd.active().whileTrue(limelight.idle());
 
 
         routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
+
+        return routine;
+    }
+
+    private AutoRoutine moveBackwardsRoutine(){
+        final AutoRoutine routine = autoFactory.newRoutine("Move Backwards Path");
+        final AutoTrajectory startEnd = moveBackwards.asAutoTraj(routine);
+        startEnd.active().whileTrue(limelight.idle());
+
+
+        routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
+
+        return routine;
+    }
+
+    private AutoRoutine align1Routine(){
+        final AutoRoutine routine = autoFactory.newRoutine("Align to Middle Path");
+        final AutoTrajectory startEnd = align1.asAutoTraj(routine);
+        startEnd.active().whileTrue(limelight.idle());
+
+
+        routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
+        startEnd.done().onTrue(
+            Commands.sequence(
+                new ParallelCommandGroup(subsystemCommands.aimAndShoot().withTimeout(5), intake.agitateCommand())
+               
+            )
+        );
 
         return routine;
     }

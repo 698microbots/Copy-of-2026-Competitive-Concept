@@ -27,9 +27,9 @@ public record ChoreoTraj(
     public static final ChoreoTraj moveForward = new ChoreoTraj(
 	    "moveForward",
 	    OptionalInt.empty(),
-	    1.42951,
+	    0.71592,
 	    new Pose2d(0.5, 2.3, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.5, 2.3, Rotation2d.fromRadians(0))
+	    new Pose2d(1, 2.3, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj OutpostAndDepotTrajectory = new ChoreoTraj(
 	    "OutpostAndDepotTrajectory",
@@ -80,6 +80,20 @@ public record ChoreoTraj(
 	    new Pose2d(1.41, 3.736, Rotation2d.fromRadians(0)),
 	    new Pose2d(2.521, 3.775, Rotation2d.fromRadians(0))
 	);
+	public static final ChoreoTraj moveBackwards = new ChoreoTraj(
+	    "moveBackwards",
+	    OptionalInt.empty(),
+	    0.58025,
+	    new Pose2d(13.4, 4.035, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(13.729, 4.015, Rotation2d.fromRadians(3.127))
+	);
+	public static final ChoreoTraj align1 = new ChoreoTraj(
+	    "align1",
+	    OptionalInt.empty(),
+	    1.59906,
+	    new Pose2d(1.787, 6.478, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.698, 4.144, Rotation2d.fromRadians(0))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -93,7 +107,9 @@ public record ChoreoTraj(
 		Map.entry("OutpostAndDepotTrajectory$2", OutpostAndDepotTrajectory$2),
 		Map.entry("OutpostAndDepotTrajectory$3", OutpostAndDepotTrajectory$3),
 		Map.entry("rotationPath", rotationPath),
-		Map.entry("simplePath", simplePath)
+		Map.entry("simplePath", simplePath),
+		Map.entry("moveBackwards", moveBackwards),
+		Map.entry("align1", align1)
     );
 
     /**

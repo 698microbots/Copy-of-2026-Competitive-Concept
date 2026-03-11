@@ -101,6 +101,9 @@ public class RobotContainer {
         //     .onTrue(intake.homingCommand())  //puts intake in starting position
         //     .onTrue(hanger.homingCommand()); //puts hanger/climber in starting position
 
+        RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
+             .onTrue(intake.homingCommand());
+
         //Default controller bindings:
         driver2.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
         driver2.rightBumper().whileTrue(subsystemCommands.shootManually());
@@ -108,8 +111,8 @@ public class RobotContainer {
         //driver.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
         
         //Default hanger bindings:
-        driver2.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING)); //povUp is the up arrow on D-pad
-        driver2.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG)); //povDown is down arrow on D-pad
+        //driver2.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING)); //povUp is the up arrow on D-pad
+        //driver2.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG)); //povDown is down arrow on D-pad
 
         //Intake test (runs the rollers when pressed and stops when not pressed):
         // driver2.leftTrigger().whileTrue(intake.spin());
@@ -121,20 +124,20 @@ public class RobotContainer {
        // driver.rightTrigger().whileFalse(feeder.stop());
 
        //Shooter test:
-        driver2.leftBumper().whileTrue(shooter.spinUpCommand(1000));
+       //driver2.leftBumper().whileTrue(shooter.spinUpCommand(1000));
 
         //Floor test:
-        driver2.x().whileTrue(floor.feedCommand());
+        //driver2.x().whileTrue(floor.feedCommand());
 
         //Hood test (position between 0.0 and 1.0):
-        driver2.b().onTrue(hood.positionCommand(0.9));
+        //driver2.b().onTrue(hood.positionCommand(0.9));
 
         //Shoot manually test:
         //driver.a().onTrue(subsystemCommands.shootManually());
         //driver2.a().onTrue(subsystemCommands.shootAndFeed());
 
         //Intake set position test:
-        driver2.y().onTrue(intake.homingCommand());
+        //driver2.y().onTrue(intake.homingCommand());
         //driver2.rightBumper().onTrue(intake.setIntakePositionUp());
         //driver2.y().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
         //driver2.y().onTrue(intake.runOnce(() -> intake.set(Intake.Position.HOMED)));
@@ -186,4 +189,4 @@ public class RobotContainer {
         .ignoringDisable(true);
     }
 
-}
+ }

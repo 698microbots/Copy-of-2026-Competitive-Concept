@@ -120,6 +120,10 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         );
     }
 
+    public Pose2d getPose(){
+        return getState().Pose;
+    }
+
     @Override
     public void periodic() {
         /*

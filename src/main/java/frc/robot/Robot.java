@@ -57,11 +57,6 @@ public class Robot extends TimedRobot {
         // System.out.println(LimelightHelpers.getTY("limelight"));
 
 
-        // System.out.println(m_robotContainer.limelight);
-        // if (m_robotContainer.limelight == null){
-        //     System.out.println("Limelight is null");
-        // }
-
     }
     
 }
