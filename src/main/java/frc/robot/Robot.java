@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Limelight;
 
 /**
@@ -55,6 +56,8 @@ public class Robot extends TimedRobot {
         // System.out.println(LimelightHelpers.getTV("limelight"));
         // System.out.println(LimelightHelpers.getTX("limelight"));
         // System.out.println(LimelightHelpers.getTY("limelight"));
+        //System.out.println(m_robotContainer.shooter.isVelocityWithinTolerance() + " " + m_robotContainer.shooter.getRPM());
+       // Commands.print(m_robotContainer.shooter.isVelocityWithinTolerance() + " " + m_robotContainer.shooter.getRPM());
 
 
     }

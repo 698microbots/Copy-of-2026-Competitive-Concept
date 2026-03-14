@@ -8,9 +8,13 @@ import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$0;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$1;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$2;
 import static frc.robot.generated.ChoreoTraj.OutpostAndDepotTrajectory$3;
-import static frc.robot.generated.ChoreoTraj.align1;
-import static frc.robot.generated.ChoreoTraj.moveBackwards;
+import static frc.robot.generated.ChoreoTraj.blueRight;
+import static frc.robot.generated.ChoreoTraj.blueLeft;
+import static frc.robot.generated.ChoreoTraj.blueMiddle;
 import static frc.robot.generated.ChoreoTraj.moveForward;
+import static frc.robot.generated.ChoreoTraj.redLeft;
+import static frc.robot.generated.ChoreoTraj.redMiddle;
+import static frc.robot.generated.ChoreoTraj.redRight;
 import static frc.robot.generated.ChoreoTraj.simplePath;
 import static frc.robot.generated.ChoreoTraj.rotationPath;
 
@@ -76,8 +80,13 @@ public final class AutoRoutines {
         autoChooser.addRoutine("Outpost and Depot", this::outpostAndDepotRoutine);
         autoChooser.addRoutine("Simple Path", this::simpleRoutine);
          autoChooser.addRoutine("Move Forward 2m", this::moveForwardRoutine);
-        autoChooser.addRoutine("Move Backward", this::moveBackwardsRoutine);
-        autoChooser.addRoutine("Align to middle and shoot", this::align1Routine);
+        autoChooser.addRoutine("Red Middle", this::redMiddleRoutine);
+        autoChooser.addRoutine("Blue Middle", this::blueMiddleRoutine);
+        autoChooser.addRoutine("Blue Right", this::blueRightRoutine);
+        autoChooser.addRoutine("Blue Left", this::blueLeftRoutine);
+        autoChooser.addRoutine("Red Left", this::redLeftRoutine);
+        autoChooser.addRoutine("Red Right", this::redRightRoutine);
+        
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
@@ -160,27 +169,97 @@ public final class AutoRoutines {
         return routine;
     }
 
-    private AutoRoutine moveBackwardsRoutine(){
-        final AutoRoutine routine = autoFactory.newRoutine("Move Backwards Path");
-        final AutoTrajectory startEnd = moveBackwards.asAutoTraj(routine);
+    private AutoRoutine blueRightRoutine(){
+        final AutoRoutine routine = autoFactory.newRoutine("Blue Right Path");
+        final AutoTrajectory startEnd = blueRight.asAutoTraj(routine);
         startEnd.active().whileTrue(limelight.idle());
-
-
-        routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
-
-        return routine;
-    }
-
-    private AutoRoutine align1Routine(){
-        final AutoRoutine routine = autoFactory.newRoutine("Align to Middle Path");
-        final AutoTrajectory startEnd = align1.asAutoTraj(routine);
-        startEnd.active().whileTrue(limelight.idle());
+        //startEnd.active().whileTrue(subsystemCommands.aimAndShoot());
 
 
         routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
         startEnd.done().onTrue(
             Commands.sequence(
-                new ParallelCommandGroup(subsystemCommands.aimAndShoot().withTimeout(5), intake.agitateCommand())
+               intake.homingCommand(), new ParallelCommandGroup(subsystemCommands.aimAndShoot().withTimeout(5), intake.agitateCommand())
+               
+            )
+        );
+
+        return routine;
+    }
+
+    private AutoRoutine blueLeftRoutine(){
+        final AutoRoutine routine = autoFactory.newRoutine("Blue Left Path");
+        final AutoTrajectory startEnd = blueLeft.asAutoTraj(routine);
+        startEnd.active().whileTrue(limelight.idle());
+        
+        routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
+        startEnd.done().onTrue(
+            Commands.sequence(
+                intake.homingCommand(), new ParallelCommandGroup(subsystemCommands.aimAndShoot().withTimeout(5), intake.agitateCommand())
+               
+            )
+        );
+
+        return routine;
+    }
+
+    private AutoRoutine redLeftRoutine(){
+        final AutoRoutine routine = autoFactory.newRoutine("Red Left Path");
+        final AutoTrajectory startEnd = redLeft.asAutoTraj(routine);
+        startEnd.active().whileTrue(limelight.idle());
+
+        routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
+        startEnd.done().onTrue(
+            Commands.sequence(
+                intake.homingCommand(), new ParallelCommandGroup(subsystemCommands.aimAndShoot().withTimeout(5), intake.agitateCommand())
+               
+            )
+        );
+
+        return routine;
+    }
+
+    private AutoRoutine redRightRoutine(){
+        final AutoRoutine routine = autoFactory.newRoutine("Red Right Path");
+        final AutoTrajectory startEnd = redRight.asAutoTraj(routine);
+        startEnd.active().whileTrue(limelight.idle());
+
+        routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
+        startEnd.done().onTrue(
+            Commands.sequence(
+                intake.homingCommand(), new ParallelCommandGroup(subsystemCommands.aimAndShoot().withTimeout(5), intake.agitateCommand())
+               
+            )
+        );
+
+        return routine;
+    }
+
+    private AutoRoutine redMiddleRoutine(){
+        final AutoRoutine routine = autoFactory.newRoutine("Red Right Path");
+        final AutoTrajectory startEnd = redMiddle.asAutoTraj(routine);
+        startEnd.active().whileTrue(limelight.idle());
+
+        routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
+        startEnd.done().onTrue(
+            Commands.sequence(
+                intake.homingCommand(), new ParallelCommandGroup(subsystemCommands.aimAndShoot().withTimeout(5), intake.agitateCommand())
+               
+            )
+        );
+
+        return routine;
+    }
+
+    private AutoRoutine blueMiddleRoutine(){
+        final AutoRoutine routine = autoFactory.newRoutine("Red Right Path");
+        final AutoTrajectory startEnd = blueMiddle.asAutoTraj(routine);
+        startEnd.active().whileTrue(limelight.idle());
+
+        routine.active().onTrue(Commands.sequence(startEnd.resetOdometry(),startEnd.cmd()));
+        startEnd.done().onTrue(
+            Commands.sequence(
+                intake.homingCommand(), new ParallelCommandGroup(subsystemCommands.aimAndShoot().withTimeout(5), intake.agitateCommand())
                
             )
         );

@@ -35,10 +35,10 @@ public class PrepareShotCommand extends Command {
         // distanceToShotMap.put(Inches.of(52.0), new Shot(2800 +435, 0.19));
         // distanceToShotMap.put(Inches.of(114.4), new Shot(3275 +435, 0.40));
         // distanceToShotMap.put(Inches.of(165.5), new Shot(3650 +490, 0.48));
-        distanceToShotMap.put(Meters.of(2.15), new Shot(3726, 0.25));
-        distanceToShotMap.put(Meters.of(3.5), new Shot(4440, 0.25));
-        distanceToShotMap.put(Meters.of(1.158), new Shot(3275, 0.25));
-        distanceToShotMap.put(Meters.of(3.9), new Shot(4950, 0.25));
+        distanceToShotMap.put(Meters.of(2.15), new Shot(3726-1200, 0.25));
+        distanceToShotMap.put(Meters.of(3.5), new Shot(4440-1200, 0.25));
+        distanceToShotMap.put(Meters.of(1.158), new Shot(3275-1200, 0.25));
+        distanceToShotMap.put(Meters.of(3.9), new Shot(4950-1200, 0.25));
     }
 
     /* 
@@ -60,7 +60,7 @@ public class PrepareShotCommand extends Command {
     }
 
     public boolean isReadyToShoot() {
-        return shooter.isVelocityWithinTolerance() && hood.isPositionWithinTolerance();
+        return shooter.isVelocityWithinTolerance(); //&& hood.isPositionWithinTolerance();
     }
 
     private Distance getDistanceToHub() {

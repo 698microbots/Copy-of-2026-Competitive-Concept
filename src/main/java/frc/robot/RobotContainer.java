@@ -41,7 +41,7 @@ public class RobotContainer {
     private final Intake intake = new Intake();
     private final Floor floor = new Floor();
     private final Feeder feeder = new Feeder();
-    private final Shooter shooter = new Shooter();
+    protected final Shooter shooter = new Shooter();
     private final Hood hood = new Hood();
     private final Hanger hanger = new Hanger();
     protected final Limelight limelight = new Limelight("limelight");
@@ -101,14 +101,21 @@ public class RobotContainer {
         //     .onTrue(intake.homingCommand())  //puts intake in starting position
         //     .onTrue(hanger.homingCommand()); //puts hanger/climber in starting position
 
-        RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
-             .onTrue(intake.homingCommand());
+        // RobotModeTriggers.autonomous()
+        //      .onTrue(shooter.spinUpCommand(1500));
+        
+         RobotModeTriggers.teleop()//.onTrue(intake.homingCommand());
+              .onTrue(Commands.parallel(intake.homingCommand(),shooter.spinUpCommand(500)));
+
 
         //Default controller bindings:
-        driver2.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
-        driver2.rightBumper().whileTrue(subsystemCommands.shootManually());
+        driver2.rightTrigger().whileTrue(subsystemCommands.aimAndShoot()).whileFalse(shooter.spinUpCommand(500));
+        // driver2.b().onTrue(shooter.spinUpCommand(2500));
+        driver2.rightBumper().whileTrue(intake.agitateCommand());
+        driver2.leftBumper().whileTrue(subsystemCommands.shootManually(3000));
         driver2.leftTrigger().whileTrue(intake.intakeCommand());  
-        //driver.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
+
+        driver2.y().onTrue(intake.runOnce(() -> intake.set(Intake.Position.HOMED)));
         
         //Default hanger bindings:
         //driver2.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING)); //povUp is the up arrow on D-pad
@@ -119,7 +126,7 @@ public class RobotContainer {
         // driver2.leftTrigger().whileFalse(intake.stop());
 
         //Feeder test (feeder keeps running after not pressed):
-       // driver2.rightTrigger().whileTrue(feeder.spin());
+       //driver2.a().whileTrue(Commands.parallel(feeder.spin(), floor.feedCommand()));
        //Caused feeder motor to slip and feeder stopped:
        // driver.rightTrigger().whileFalse(feeder.stop());
 
@@ -127,7 +134,7 @@ public class RobotContainer {
        //driver2.leftBumper().whileTrue(shooter.spinUpCommand(1000));
 
         //Floor test:
-        //driver2.x().whileTrue(floor.feedCommand());
+        //driver2.a().whileTrue(floor.feedCommand());
 
         //Hood test (position between 0.0 and 1.0):
         //driver2.b().onTrue(hood.positionCommand(0.9));
@@ -147,9 +154,9 @@ public class RobotContainer {
     private void configureManualDriveBindings() {
         final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(
             swerve, 
-            () -> -swerveDriver.getLeftY(), 
-            () -> -swerveDriver.getLeftX(), 
-            () -> -swerveDriver.getRightX()
+            () -> -swerveDriver.getLeftY()* 0.7, 
+            () -> -swerveDriver.getLeftX() * 0.7, 
+            () -> -swerveDriver.getRightX() * 0.7
         );
         
         swerve.setDefaultCommand(manualDriveCommand);
