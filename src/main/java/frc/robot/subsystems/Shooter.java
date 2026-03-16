@@ -71,16 +71,15 @@ public class Shooter extends SubsystemBase {
             )
             .withSlot0(
                 new Slot0Configs()
-                    .withKP(0.5) //0.5
+                    .withKP(0.4) //0.5
                     .withKI(0)
-                    .withKD(0.4)
+                    .withKD(0.02)
                     .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
             )
             .withClosedLoopRamps(
                 new ClosedLoopRampsConfigs()
-                    .withDutyCycleClosedLoopRampPeriod(0.05)
-            )
-            ;
+                    .withDutyCycleClosedLoopRampPeriod(0.25)
+            );
         
         motor.getConfigurator().apply(config);
     }
