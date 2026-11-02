@@ -19,7 +19,6 @@ import frc.robot.Constants.Driving;
 import frc.robot.commands.AutoRoutines;
 import frc.robot.commands.ManualDriveCommand;
 import frc.robot.commands.SubsystemCommands;
-import frc.robot.commands.TagAlignCommand;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Floor;
 import frc.robot.subsystems.Hanger;
@@ -28,6 +27,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Floor.Speed;
 import frc.util.SwerveTelemetry;
 
 /**
@@ -73,7 +73,8 @@ public class RobotContainer {
         hood,
         hanger,
         () -> -driver2.getLeftY(),
-        () -> -driver2.getLeftX()
+        () -> -driver2.getLeftX(), 
+        limelight
     );
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -104,15 +105,17 @@ public class RobotContainer {
         // RobotModeTriggers.autonomous()
         //      .onTrue(shooter.spinUpCommand(1500));
         
-         RobotModeTriggers.teleop()//.onTrue(intake.homingCommand());
-              .onTrue(Commands.parallel(intake.homingCommand(),shooter.spinUpCommand(500)));
+       //RobotModeTriggers.teleop().onTrue(intake.homingCommand());
+        //       .onTrue(Commands.sequence(shooter.spinUpCommand(500)));
 
 
+        hood.setPosition(0);
         //Default controller bindings:
-        driver2.rightTrigger().whileTrue(subsystemCommands.aimAndShoot()).whileFalse(shooter.spinUpCommand(500));
+        driver2.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
         // driver2.b().onTrue(shooter.spinUpCommand(2500));
         driver2.rightBumper().whileTrue(intake.agitateCommand());
-        driver2.leftBumper().whileTrue(subsystemCommands.shootManually(3000));
+        driver2.a().whileTrue(subsystemCommands.shootManually(3500));
+
         driver2.leftTrigger().whileTrue(intake.intakeCommand());  
 
         driver2.y().onTrue(intake.runOnce(() -> intake.set(Intake.Position.HOMED)));
@@ -129,7 +132,7 @@ public class RobotContainer {
        //driver2.a().whileTrue(Commands.parallel(feeder.spin(), floor.feedCommand()));
        //Caused feeder motor to slip and feeder stopped:
        // driver.rightTrigger().whileFalse(feeder.stop());
-
+        //kaleb was here
        //Shooter test:
        //driver2.leftBumper().whileTrue(shooter.spinUpCommand(1000));
 

@@ -95,7 +95,7 @@ public class Intake extends SubsystemBase {
                 new CurrentLimitsConfigs()
                     .withStatorCurrentLimit(Amps.of(120))
                     .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimit(Amps.of(70))
+                    .withSupplyCurrentLimit(Amps.of(100))
                     .withSupplyCurrentLimitEnable(true)
             )
             .withFeedback(

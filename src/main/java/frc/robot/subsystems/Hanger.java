@@ -72,9 +72,9 @@ public class Hanger extends SubsystemBase {
             )
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
-                    .withStatorCurrentLimit(Amps.of(20))
+                    .withStatorCurrentLimit(Amps.of(20))//20
                     .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimit(Amps.of(70))
+                    .withSupplyCurrentLimit(Amps.of(70))//70
                     .withSupplyCurrentLimitEnable(true)
             )
             .withMotionMagic(

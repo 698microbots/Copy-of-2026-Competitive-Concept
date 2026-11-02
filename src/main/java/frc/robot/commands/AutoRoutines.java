@@ -69,7 +69,7 @@ public final class AutoRoutines {
         this.hanger = hanger;
         this.limelight = limelight;
 
-        this.subsystemCommands = new SubsystemCommands(swerve, intake, floor, feeder, shooter, hood, hanger);
+        this.subsystemCommands = new SubsystemCommands(swerve, intake, floor, feeder, shooter, hood, hanger, limelight);
 
         this.autoFactory = swerve.createAutoFactory();
         this.autoChooser = new AutoChooser();

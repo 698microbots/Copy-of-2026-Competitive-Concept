@@ -10,6 +10,7 @@ import frc.robot.subsystems.Floor;
 import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
@@ -21,6 +22,7 @@ public final class SubsystemCommands {
     private final Shooter shooter;
     private final Hood hood;
     private final Hanger hanger;
+    Limelight limelight;
 
     private final DoubleSupplier forwardInput;
     private final DoubleSupplier leftInput;
@@ -34,7 +36,8 @@ public final class SubsystemCommands {
         Hood hood,
         Hanger hanger,
         DoubleSupplier forwardInput,
-        DoubleSupplier leftInput
+        DoubleSupplier leftInput,
+        Limelight limelight
     ) {
         this.swerve = swerve;
         this.intake = intake;
@@ -46,6 +49,7 @@ public final class SubsystemCommands {
 
         this.forwardInput = forwardInput;
         this.leftInput = leftInput;
+        this.limelight = limelight;
     }
 
     public SubsystemCommands(
@@ -55,7 +59,8 @@ public final class SubsystemCommands {
         Feeder feeder,
         Shooter shooter,
         Hood hood,
-        Hanger hanger
+        Hanger hanger,
+        Limelight limelight
     ) {
         this(
             swerve,
@@ -66,12 +71,13 @@ public final class SubsystemCommands {
             hood,
             hanger,
             () -> 0,
-            () -> 0
+            () -> 0,
+            limelight
         );
     }
 
     public Command aimAndShoot() {
-        final AimAndDriveCommand aimAndDriveCommand = new AimAndDriveCommand(swerve, forwardInput, leftInput);
+        final AimAndDriveCommand aimAndDriveCommand = new AimAndDriveCommand(swerve, forwardInput, leftInput, limelight);
         final PrepareShotCommand prepareShotCommand = new PrepareShotCommand(shooter, hood, () -> swerve.getState().Pose);
         // System.out.println("is aimed: " + aimAndDriveCommand.isAimed() + " prepareshotcommand: " + prepareShotCommand.isReadyToShoot());
 

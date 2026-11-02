@@ -15,16 +15,18 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Driving;
 import frc.robot.Landmarks;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 import frc.util.DriveInputSmoother;
 import frc.util.GeometryUtil;
 import frc.util.ManualDriveInput;
 
-public class AimAndDriveCommand extends Command { 
-    private static final Angle kAimTolerance = Degrees.of(12); //5
+public class AimAndDriveCommand extends Command {
+    private static final Angle kAimTolerance = Degrees.of(15);
 
     private final Swerve swerve;
     private final DriveInputSmoother inputSmoother;
+    private final Limelight limelight;
 
     private final SwerveRequest.FieldCentricFacingAngle fieldCentricFacingAngleRequest = new SwerveRequest.FieldCentricFacingAngle()
         .withRotationalDeadband(Driving.kPIDRotationDeadband)
@@ -37,21 +39,24 @@ public class AimAndDriveCommand extends Command {
     public AimAndDriveCommand(
         Swerve swerve,
         DoubleSupplier forwardInput,
-        DoubleSupplier leftInput
+        DoubleSupplier leftInput,
+        Limelight limelight
     ) {
         this.swerve = swerve;
         this.inputSmoother = new DriveInputSmoother(forwardInput, leftInput);
-        addRequirements(swerve);
+        this.limelight = limelight;
+        addRequirements(swerve, limelight);
     }
 
-    public AimAndDriveCommand(Swerve swerve) {
-        this(swerve, () -> 0, () -> 0);
+    public AimAndDriveCommand(Swerve swerve, Limelight limelight) {
+        this(swerve, () -> 0, () -> 0, limelight);
     }
 
     public boolean isAimed() {
         final Rotation2d targetHeading = fieldCentricFacingAngleRequest.TargetDirection;
         final Rotation2d currentHeadingInBlueAlliancePerspective = swerve.getState().Pose.getRotation();
         final Rotation2d currentHeadingInOperatorPerspective = currentHeadingInBlueAlliancePerspective.rotateBy(swerve.getOperatorForwardDirection());
+        System.out.println( GeometryUtil.isNear(targetHeading, currentHeadingInOperatorPerspective, kAimTolerance));
         return GeometryUtil.isNear(targetHeading, currentHeadingInOperatorPerspective, kAimTolerance);
     }
 
@@ -79,3 +84,5 @@ public class AimAndDriveCommand extends Command {
         return false;
     }
 }
+
+
