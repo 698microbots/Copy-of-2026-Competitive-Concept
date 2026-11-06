@@ -25,8 +25,9 @@ import frc.robot.Ports;
 
 public class Feeder extends SubsystemBase {
     public enum Speed {
-        FEED(5000);
-
+        //FEED(5000);
+        FEED(3000),
+        STOP(0);
         private final double rpm;
 
         private Speed(double rpm) {
@@ -48,7 +49,7 @@ public class Feeder extends SubsystemBase {
         final TalonFXConfiguration config = new TalonFXConfiguration()
             .withMotorOutput(
                 new MotorOutputConfigs()
-                    .withInverted(InvertedValue.CounterClockwise_Positive)
+                    .withInverted(InvertedValue.Clockwise_Positive)
                     .withNeutralMode(NeutralModeValue.Coast)
             )
             .withCurrentLimits(
@@ -88,6 +89,17 @@ public class Feeder extends SubsystemBase {
         return startEnd(() -> set(Speed.FEED), () -> setPercentOutput(0));
     }
 
+    //Added a spin command:
+    public Command spin(){
+        return runOnce(() -> set(Speed.FEED));
+    }
+
+    //Added a stop command (does not work with whileFalse binding):
+    public Command stop(){
+        return runOnce(() -> set(Speed.STOP));
+    }
+
+
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
@@ -95,4 +107,7 @@ public class Feeder extends SubsystemBase {
         builder.addDoubleProperty("Stator Current", () -> motor.getStatorCurrent().getValue().in(Amps), null);
         builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
     }
+
+    @Override
+    public void periodic(){}
 }

@@ -51,8 +51,8 @@ public class Intake extends SubsystemBase {
     public enum Position {
         HOMED(110),
         STOWED(100),
-        INTAKE(-4),
-        AGITATE(20);
+        INTAKE(80),
+        AGITATE(100);
 
         private final double degrees;
 
@@ -77,10 +77,10 @@ public class Intake extends SubsystemBase {
     private boolean isHomed = false;
 
     public Intake() {
-        pivotMotor = new TalonFX(Ports.kIntakePivot, Ports.kCANivoreCANBus);
+        pivotMotor = new TalonFX(Ports.kIntakePivot, Ports.kRoboRioCANBus);
         rollerMotor = new TalonFX(Ports.kIntakeRollers, Ports.kRoboRioCANBus);
         configurePivotMotor();
-        configureRollerMotor();
+        //configureRollerMotor();
         SmartDashboard.putData(this);
     }
 
@@ -88,14 +88,14 @@ public class Intake extends SubsystemBase {
         final TalonFXConfiguration config = new TalonFXConfiguration()
             .withMotorOutput(
                 new MotorOutputConfigs()
-                    .withInverted(InvertedValue.CounterClockwise_Positive)
+                    .withInverted(InvertedValue.Clockwise_Positive)
                     .withNeutralMode(NeutralModeValue.Brake)
             )
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
                     .withStatorCurrentLimit(Amps.of(120))
                     .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimit(Amps.of(70))
+                    .withSupplyCurrentLimit(Amps.of(100))
                     .withSupplyCurrentLimitEnable(true)
             )
             .withFeedback(
@@ -129,7 +129,7 @@ public class Intake extends SubsystemBase {
                 new CurrentLimitsConfigs()
                     .withStatorCurrentLimit(Amps.of(120))
                     .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimit(Amps.of(70))
+                    .withSupplyCurrentLimit(Amps.of(50))
                     .withSupplyCurrentLimitEnable(true)
             );
         rollerMotor.getConfigurator().apply(config);
@@ -162,10 +162,12 @@ public class Intake extends SubsystemBase {
         );
     }
 
+    //HOMED put intake in down position
+    //INTAKE put intake up
     public Command intakeCommand() {
         return startEnd(
             () -> {
-                set(Position.INTAKE);
+                //set(Position.HOMED); //removed because pivot motor was stalling
                 set(Speed.INTAKE);
             },
             () -> set(Speed.STOP)
@@ -191,7 +193,7 @@ public class Intake extends SubsystemBase {
 
     public Command homingCommand() {
         return Commands.sequence(
-            runOnce(() -> setPivotPercentOutput(0.1)),
+            runOnce(() -> setPivotPercentOutput(0.15)),
             Commands.waitUntil(() -> pivotMotor.getSupplyCurrent().getValue().in(Amps) > 6),
             runOnce(() -> {
                 pivotMotor.setPosition(Position.HOMED.angle());
@@ -201,6 +203,18 @@ public class Intake extends SubsystemBase {
         )
         .unless(() -> isHomed)
         .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+
+    public Command setIntakePositionUp(){
+        return runOnce(() -> pivotMotor.setPosition(Position.INTAKE.angle()));
+    }
+
+    public Command spin() {
+        return runOnce(() -> set(Speed.INTAKE));
+    }
+
+    public Command stop(){
+        return runOnce(() ->  set(Speed.STOP));
     }
 
     @Override

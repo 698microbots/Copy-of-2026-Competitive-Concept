@@ -27,6 +27,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Floor.Speed;
 import frc.util.SwerveTelemetry;
 
 /**
@@ -36,18 +37,22 @@ import frc.util.SwerveTelemetry;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    private final Swerve swerve = new Swerve();
+    public final Swerve swerve = new Swerve();
     private final Intake intake = new Intake();
     private final Floor floor = new Floor();
     private final Feeder feeder = new Feeder();
-    private final Shooter shooter = new Shooter();
+    protected final Shooter shooter = new Shooter();
     private final Hood hood = new Hood();
     private final Hanger hanger = new Hanger();
-    private final Limelight limelight = new Limelight("limelight");
+    protected final Limelight limelight = new Limelight("limelight");
 
     private final SwerveTelemetry swerveTelemetry = new SwerveTelemetry(Driving.kMaxSpeed.in(MetersPerSecond));
     
-    private final CommandXboxController driver = new CommandXboxController(0);
+    //Swerve driver on port 0 in Driver Station:
+    private final CommandXboxController swerveDriver = new CommandXboxController(0);
+
+    //Secondary driver on port 1 in Driver Station:
+    private final CommandXboxController driver2 = new CommandXboxController(1);
 
     private final AutoRoutines autoRoutines = new AutoRoutines(
         swerve,
@@ -67,8 +72,9 @@ public class RobotContainer {
         shooter,
         hood,
         hanger,
-        () -> -driver.getLeftY(),
-        () -> -driver.getLeftX()
+        () -> -driver2.getLeftY(),
+        () -> -driver2.getLeftX(), 
+        limelight
     );
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -91,34 +97,91 @@ public class RobotContainer {
         configureManualDriveBindings();
         limelight.setDefaultCommand(updateVisionCommand());
 
-        RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
-            .onTrue(intake.homingCommand())
-            .onTrue(hanger.homingCommand());
+        //Original default commands at beginning of match:
+        // RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
+        //     .onTrue(intake.homingCommand())  //puts intake in starting position
+        //     .onTrue(hanger.homingCommand()); //puts hanger/climber in starting position
 
-        driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
-        driver.rightBumper().whileTrue(subsystemCommands.shootManually());
-        driver.leftTrigger().whileTrue(intake.intakeCommand());
-        driver.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
+        // RobotModeTriggers.autonomous()
+        //      .onTrue(shooter.spinUpCommand(1500));
+        
+       //RobotModeTriggers.teleop().onTrue(intake.homingCommand());
+        //       .onTrue(Commands.sequence(shooter.spinUpCommand(500)));
 
-        driver.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
-        driver.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
+
+        hood.setPosition(0);
+        //Default controller bindings:
+        driver2.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
+        // driver2.b().onTrue(shooter.spinUpCommand(2500));
+        driver2.rightBumper().whileTrue(intake.agitateCommand());
+        driver2.a().whileTrue(subsystemCommands.shootManually(3500));
+
+        driver2.leftTrigger().whileTrue(intake.intakeCommand());  
+
+        driver2.y().onTrue(intake.runOnce(() -> intake.set(Intake.Position.HOMED)));
+        
+        //Default hanger bindings:
+        //driver2.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING)); //povUp is the up arrow on D-pad
+        //driver2.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG)); //povDown is down arrow on D-pad
+
+        //Intake test (runs the rollers when pressed and stops when not pressed):
+        // driver2.leftTrigger().whileTrue(intake.spin());
+        // driver2.leftTrigger().whileFalse(intake.stop());
+
+        //Feeder test (feeder keeps running after not pressed):
+       //driver2.a().whileTrue(Commands.parallel(feeder.spin(), floor.feedCommand()));
+       //Caused feeder motor to slip and feeder stopped:
+       // driver.rightTrigger().whileFalse(feeder.stop());
+        //kaleb was here
+       //Shooter test:
+       //driver2.leftBumper().whileTrue(shooter.spinUpCommand(1000));
+
+        //Floor test:
+        //driver2.a().whileTrue(floor.feedCommand());
+
+        //Hood test (position between 0.0 and 1.0):
+        //driver2.b().onTrue(hood.positionCommand(0.9));
+
+        //Shoot manually test:
+        //driver.a().onTrue(subsystemCommands.shootManually());
+        //driver2.a().onTrue(subsystemCommands.shootAndFeed());
+
+        //Intake set position test:
+        //driver2.y().onTrue(intake.homingCommand());
+        //driver2.rightBumper().onTrue(intake.setIntakePositionUp());
+        //driver2.y().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
+        //driver2.y().onTrue(intake.runOnce(() -> intake.set(Intake.Position.HOMED)));
+
     }
 
     private void configureManualDriveBindings() {
         final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(
             swerve, 
-            () -> -driver.getLeftY(), 
-            () -> -driver.getLeftX(), 
-            () -> -driver.getRightX()
+            () -> -swerveDriver.getLeftY()* 0.7, 
+            () -> -swerveDriver.getLeftX() * 0.7, 
+            () -> -swerveDriver.getRightX() * 0.7
         );
+        
         swerve.setDefaultCommand(manualDriveCommand);
-        driver.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
-        driver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
-        driver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
-        driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
-        driver.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
-    }
 
+        //Default 'a' 'b' 'x' 'y' button bindings (rotation commands):
+        swerveDriver.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
+        swerveDriver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
+        swerveDriver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
+        swerveDriver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
+       
+       //Track and align with aprilTag:
+    //    swerveDriver.y().whileTrue(new ManualDriveCommand(
+    //         swerve, 
+    //         () -> LimelightHelpers.getTY("limelight") * 0.1, 
+    //         () -> -driver2.getLeftX(), // forward and backward motion is controlled by driver
+    //         () -> LimelightHelpers.getTX("limelight")*.03
+    //     ));
+
+        //P1 reset field-centric heading:
+        swerveDriver.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
+
+    }
 
 
     private Command updateVisionCommand() {
@@ -135,4 +198,5 @@ public class RobotContainer {
         })
         .ignoringDisable(true);
     }
-}
+
+ }
